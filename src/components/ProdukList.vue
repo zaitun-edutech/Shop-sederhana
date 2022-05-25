@@ -8,8 +8,8 @@
         <button class="btn btn-primary" @click="addCart(i)">Add To Cart</button>
       </div>
     </div>
+    {{ cart }}
   </div>
-  {{ cart }}
 </template>
 <script setup>
 import { computed, onMounted } from "vue-demi";

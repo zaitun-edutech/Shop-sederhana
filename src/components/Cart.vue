@@ -1,51 +1,76 @@
 <template>
   <div>
-    <ul class="list-group" v-for="item in data" :key="item">
-      <li class="list-group-item">
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-          @click="removeCart(item.id)"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="media">
-          <img :src="item.imgUrl" :alt="item.title" />
-          <div class="media-body">
-            <p class="mt-0">{{ item.title }}</p>
+    <span v-if="isProses == false">
+      <ul class="list-group" v-for="item in data" :key="item">
+        <li class="list-group-item">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            @click="removeCart(item.id)"
+          >
+            <span aria-hidden="false">&times;</span>
+          </button>
+          <div class="media">
+            <img :src="item.imgUrl" :alt="item.title" />
+            <div class="media-body">
+              <p class="mt-0">{{ item.title }}</p>
 
-            <button
-              class="btn-qty btn btn-sm btn-secondary"
-              @click="removeQty(item.id)"
-            >
-              -
-            </button>
-            x {{ item.quantity }}
-            <button
-              class="btn-qty btn btn-sm btn-secondary"
-              @click="addQty(item.id)"
-            >
-              +
-            </button>
+              <button
+                class="btn-qty btn btn-sm btn-secondary"
+                @click="removeQty(item.id)"
+              >
+                -
+              </button>
+              x {{ item.quantity }}
+              <button
+                class="btn-qty btn btn-sm btn-secondary"
+                @click="addQty(item.id)"
+              >
+                +
+              </button>
+            </div>
           </div>
-        </div>
-      </li>
-    </ul>
-    <button
-      v-if="data.length"
-      class="checkout-button btn btn-lg btn-block btn-success"
-    >
-      ChekOut ({{ totalPrice.toLocaleString() }})
-    </button>
+        </li>
+      </ul>
+      <a
+        href="#"
+        v-if="data.length"
+        class="checkout-button btn btn-lg btn-block btn-success mt-3"
+        @click="checkOut"
+      >
+        ChekOut ($ {{ totalPrice.toLocaleString() }})
+      </a>
+    </span>
+    <div v-if="isProses == true">
+      Anda akan Membeli Produk dengan Rincian : <br />
+      <div v-for="(item, index) in data" :key="index">
+        <span>
+          <p>
+            {{ index + 1 }}. {{ item.title }} x {{ item.quantity }} = $
+            {{ item.price.toLocaleString() }}
+          </p>
+        </span>
+      </div>
+      <div btn-group>
+        <a :href="waApiUrl" class="btn btn-sm btn-primary">Lanjut Pesan</a>
+        <button class="btn btn-danger btn-sm ml-2" @click="cancel">
+          Cancel
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
-import { computed, onMounted } from "vue-demi";
+import { computed, onMounted, onUnmounted, ref } from "vue-demi";
 import { counterStore } from "../store/product";
 
 const counter = counterStore();
+const isProses = ref(false);
+const waApiUrl = ref("");
+const message = ref("");
+const number = ref("082283919347");
 const data = computed(() => counter.cart);
 // const addCart = (id) => {
 //   counter.addToCart(id);
@@ -66,9 +91,19 @@ const totalPrice = computed(() => {
   });
   return total;
 });
-onMounted(() => {
-  console.log(data);
-});
+const checkOut = () => {
+  for (let i = 0; i < data.value.length; i++) {
+    message.value += `${data.value[i].title} x ${data.value[i].quantity} = $ ${
+      data.value[i].price * data.value[i].quantity + "\n"
+    }`;
+    waApiUrl.value = `https://wa.me/${number.value}?text= saya akan memesan : ${message.value}`;
+    isProses.value = true;
+    console.log(message.value);
+  }
+};
+const cancel = () => {
+  isProses.value = false;
+};
 </script>
 <style scoped>
 .btn-qty {

@@ -40,5 +40,13 @@ export const counterStore = defineStore({
         this.removeFromCart(id);
       }
     },
+    emptyCart() {
+      this.cart = [];
+    },
+    cartContent() {
+      for (let i = 0; i < this.cart.length; i++) {
+        this.cart[i].total = this.cart[i].price * this.cart[i].quantity;
+      }
+    },
   },
 });
