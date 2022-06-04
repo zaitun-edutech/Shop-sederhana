@@ -70,7 +70,7 @@ const counter = counterStore();
 const isProses = ref(false);
 const waApiUrl = ref("");
 const message = ref("");
-const number = ref("6282283919347");
+const number = ref("85299658211");
 const data = computed(() => counter.cart);
 // const addCart = (id) => {
 //   counter.addToCart(id);
