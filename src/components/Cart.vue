@@ -70,7 +70,7 @@ const counter = counterStore();
 const isProses = ref(false);
 const waApiUrl = ref("");
 const message = ref("");
-const number = ref("082283919347");
+const number = ref("682283919347");
 const data = computed(() => counter.cart);
 // const addCart = (id) => {
 //   counter.addToCart(id);
@@ -118,6 +118,6 @@ const cancel = () => {
   padding: -30px;
 }
 img {
-  width: 35%;
+  width: 80px;
 }
 </style>
